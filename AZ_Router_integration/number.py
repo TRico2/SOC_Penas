@@ -66,8 +66,8 @@ class AZRouterNumber(CoordinatorEntity, NumberEntity):
             entry_type=DeviceEntryType.SERVICE,
             identifiers={(DOMAIN, self.platform.config_entry.unique_id)},
             manufacturer=MANUFACTURER,
-            model="A-Z Router smart+",
-            name=self.coordinator.name,  #"AzRouter"
+            model="A-Z Router smart",
+            name="AzRouter", 
         )
 
     async def write_data(self, url, power_limit, target_temp):
