@@ -61,7 +61,7 @@
       title: FVE Zapnutí prodeje
   mode: single
 
-  - id: '1708036473530'
+- id: '1708036473530'
   alias: spotová cena je vyšší než náklady na prodej + nákup elektřiny od dodavatele
     - konec
   description: ''
@@ -77,4 +77,60 @@
     data:
       message: FVE Ukončení prodeje {{now().strftime("%H:%M:%S")}}
       title: FVE Ukončení prodeje
+  mode: single
+
+- id: '1707855697146'
+  alias: hrozí nedostatek kapacity, víkend
+  description: ""
+  trigger:
+  - platform: template
+    value_template: >-
+    {{((states("sensor.energy_production_tomorrow") | float > 
+    (10 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
+    states("sensor.azrouter_temperature") | int) | int + 
+    (states("sensor.battery_state_of_charge") / 100 * 10.65 | float ) | float + 
+    1.2 | float) | float)) and 
+    (states("sensor.current_spot_electricity_price") | float >
+    states("sensor.spot_most_expensive_electricity_tomorrow") | float) and 
+    (states("sensor.spot_most_expensive_electricity_tomorrow") > 2.44)
+    }}
+  condition:
+  - condition: time
+    after: "18:00:00"
+    before: "08:00:00"
+    weekday:
+      - sat
+      - fri
+  action:
+  - service: script.prepnuti_do_vybijeni
+    data: {}
+  mode: single
+
+- id: '1707855621467'
+  alias: hrozí nedostatek kapacity, pracovní dny
+  description: ''
+  trigger: - platform: template
+    value_template: >-
+    {{((states("sensor.energy_production_tomorrow") | float > 
+    (10 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
+    states("sensor.azrouter_temperature") | int) | int + 
+    (states("sensor.battery_state_of_charge") / 100 * 10.65 | float ) | float + 
+    1.2 | float) | float)) and 
+    (states("sensor.current_spot_electricity_price") | float >
+    states("sensor.spot_most_expensive_electricity_tomorrow") | float) and 
+    (states("sensor.spot_most_expensive_electricity_tomorrow") > 2.44)
+    }}
+  condition:
+  - condition: time
+    after: '18:00:00'
+    before: 08:00:00
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - sun
+  action:
+  - service: script.prepnuti_do_vybijeni
+    data: {}
   mode: single
