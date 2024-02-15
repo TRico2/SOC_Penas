@@ -1,6 +1,6 @@
 # SOC_Penas
 Praktická část odborné práce s názvem: Inteligentní řízení fotovoltaické elektrárny a její propojení s chytrou domácností
-####Návod k instalaci integrace:
+#### Návod k instalaci integrace:
 1. Složku s integrací vložte do složky config/custom_components v HomeAssistant úložišti
 2. Do souboru configuration.yaml vložte:
 
