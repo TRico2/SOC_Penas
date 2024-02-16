@@ -36,7 +36,7 @@ obnoveni_ohrevu_tuv:
     value: 65
   mode: single
   icon: mdi:water-boiler
-'1708029145048':
+'konec vybijeni':
   alias: FVE - Vypnutí exportu do sítě
   sequence:
   - device_id: f1fd78d2b641ea4e64ccc5b90035519b
