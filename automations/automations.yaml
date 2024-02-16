@@ -85,19 +85,18 @@
   trigger:
   - platform: template
     value_template: >-
-    {{((states("sensor.energy_production_tomorrow") | float > 
+    {{(states("sensor.energy_production_tomorrow") | float > 
     (10 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
     states("sensor.azrouter_temperature") | int) | int + 
     (states("sensor.battery_state_of_charge") / 100 * 10.65 | float ) | float + 
-    1.2 | float) | float)) and 
+    1.2 | float) | float) and 
     (states("sensor.current_spot_electricity_price") | float >
-    states("sensor.spot_most_expensive_electricity_tomorrow") | float) and 
-    (states("sensor.spot_most_expensive_electricity_tomorrow") > 2.44)
+    states("sensor.spot_most_expensive_electricity_tomorrow") | float) 
     }}
   condition:
   - condition: time
     after: "18:00:00"
-    before: "08:00:00"
+    before: "00:00:00"
     weekday:
       - sat
       - fri
@@ -109,21 +108,21 @@
 - id: '1707855621467'
   alias: hrozí nedostatek kapacity, pracovní dny
   description: ''
-  trigger: - platform: template
+  trigger: 
+  - platform: template
     value_template: >-
-    {{((states("sensor.energy_production_tomorrow") | float > 
-    (10 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
+    {{(states("sensor.energy_production_tomorrow") | float > 
+    (6 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
     states("sensor.azrouter_temperature") | int) | int + 
     (states("sensor.battery_state_of_charge") / 100 * 10.65 | float ) | float + 
-    1.2 | float) | float)) and 
+    1.2 | float) | float) and 
     (states("sensor.current_spot_electricity_price") | float >
-    states("sensor.spot_most_expensive_electricity_tomorrow") | float) and 
-    (states("sensor.spot_most_expensive_electricity_tomorrow") > 2.44)
+    states("sensor.spot_most_expensive_electricity_tomorrow") | float) 
     }}
   condition:
   - condition: time
     after: '18:00:00'
-    before: 08:00:00
+    before: 00:00:00
     weekday:
     - mon
     - tue
@@ -132,5 +131,60 @@
     - sun
   action:
   - service: script.prepnuti_do_vybijeni
+    data: {}
+  mode: single
+
+- id: '1708041150336'
+  alias: hrozí nedostatek kapacity, víkend-konec
+  description: ''
+  trigger: 
+  - platform: template
+    value_template: >- 
+    {{(states("sensor.energy_production_tomorrow") | float < 
+    (6 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
+    states("sensor.azrouter_temperature") | int) | int + 
+    (states("sensor.battery_state_of_charge") / 100 * 10.65 | float ) | float + 
+    1.2 | float) | float) or 
+    (states("sensor.current_spot_electricity_price") | float <
+    states("sensor.spot_most_expensive_electricity_tomorrow") | float) 
+    }}
+  condition:
+  - condition: time
+    after: '18:00:00'
+    before: 00:00:00
+    weekday:
+    - sat
+    - fri
+  action:
+  - service: script.1708029145048
+    data: {}
+  mode: single
+
+- id: '1708041185619'
+  alias: hrozí nedostatek kapacity, pracovní dny-konec
+  description: ''
+  trigger: 
+  - platform: template
+    value_template: >-
+    {{(states("sensor.energy_production_tomorrow") | float < 
+    (6 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
+    states("sensor.azrouter_temperature") | int) | int + 
+    (states("sensor.battery_state_of_charge") / 100 * 10.65 | float ) | float + 
+    1.2 | float) | float) or 
+    (states("sensor.current_spot_electricity_price") | float <
+    states("sensor.spot_most_expensive_electricity_tomorrow") | float) 
+    }}
+  condition:
+  - condition: time
+    after: '18:00:00'
+    before: 00:00:00
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - sun
+  action:
+  - service: script.1708029145048
     data: {}
   mode: single
