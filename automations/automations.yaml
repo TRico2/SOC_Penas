@@ -71,7 +71,7 @@
     below: 7.94
   condition: []
   action:
-  - service: script.1708029145048
+  - service: script.konec_vybijeni
     data: {}
   - service: notify.notify
     data:
@@ -156,7 +156,7 @@
     - sat
     - fri
   action:
-  - service: script.1708029145048
+  - service: script.konec_vybijeni
     data: {}
   mode: single
 
@@ -185,6 +185,6 @@
     - thu
     - sun
   action:
-  - service: script.1708029145048
+  - service: script.konec_vybijeni
     data: {}
   mode: single
