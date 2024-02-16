@@ -141,7 +141,7 @@
   - platform: template
     value_template: >- 
     {{(states("sensor.energy_production_tomorrow") | float < 
-    (6 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
+    (10 + 285 * 4180 * (states("number.azrouter_target_temperature") | int - 
     states("sensor.azrouter_temperature") | int) | int + 
     (states("sensor.battery_state_of_charge") / 100 * 10.65 | float ) | float + 
     1.2 | float) | float) or 
